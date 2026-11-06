@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>WebNative.ai — Born in the Web</title>
+<meta name="description" content="WebNative.ai is for sale. The name for the agent that belongs in the web — the interface where AI agents search, extract, ask permission, and learn.">
+<style>
+  :root{
+    --paper:#faf8f3; --ink:#17130c; --muted:#6f675a; --line:#e6ddcd;
+    --card:#ffffff; --blue:#1d4ed8; --blue-soft:#e8eefc; --amber:#b45309;
+    --green:#15803d; --red:#b91c1c; --dark:#141210;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--paper);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+    line-height:1.6;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:880px;margin:0 auto;padding:0 22px}
+  header{padding:64px 0 8px}
+  .eyebrow{font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin:0 0 18px}
+  .eyebrow b{color:var(--blue);font-weight:600}
+  h1{font-family:Georgia,"Times New Roman",serif;font-size:clamp(44px,8vw,72px);
+    line-height:1.02;margin:0 0 20px;font-weight:700;letter-spacing:-.01em}
+  h1 em{font-style:italic;color:var(--blue)}
+  .lede{font-size:19px;line-height:1.55;color:#3a342a;max-width:640px;margin:0}
+  .lede strong{color:var(--ink)}
+  .rule{border:0;border-top:1px solid var(--line);margin:44px 0}
+  section{padding:8px 0}
+  h2{font-family:Georgia,serif;font-size:30px;line-height:1.2;margin:0 0 6px}
+  .kicker{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--amber);
+    font-weight:700;margin:0 0 10px}
+  .sub{color:var(--muted);margin:0 0 22px;max-width:640px}
+  p{margin:0 0 16px;max-width:680px}
+  .cols{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:24px 0}
+  @media(max-width:640px){.cols{grid-template-columns:1fr}}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px 22px}
+  .card h3{margin:0 0 6px;font-size:17px}
+  .card p{margin:0;font-size:15px;color:#3a342a}
+  .card .tag{display:inline-block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;
+    font-weight:700;color:var(--blue);background:var(--blue-soft);border-radius:999px;
+    padding:3px 10px;margin-bottom:10px}
+  .fact{display:flex;gap:12px;padding:14px 0;border-top:1px solid var(--line)}
+  .fact:first-of-type{border-top:0}
+  .fact .n{font-family:Georgia,serif;font-size:26px;line-height:1;color:var(--blue);min-width:34px}
+  .fact p{margin:0}
+  .fact .src{font-size:13px;color:var(--muted)}
+  table{width:100%;border-collapse:collapse;margin:22px 0;font-size:15px}
+  th{text-align:left;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);
+    padding:10px 12px;border-bottom:2px solid var(--ink)}
+  td{padding:14px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+  td:first-child{font-weight:700;white-space:nowrap}
+  .funnel{margin:26px 0 8px}
+  .bar{display:flex;align-items:center;gap:14px;margin:10px 0}
+  .bar .lbl{width:150px;font-size:13px;color:var(--muted);text-align:right;flex:none}
+  .bar .fill{height:26px;border-radius:6px;background:var(--blue);color:#fff;
+    font-size:13px;font-weight:700;display:flex;align-items:center;padding:0 10px;min-width:90px}
+  .bar .fill.dim{background:#9db4e8}
+  .bar .fill.amber{background:var(--amber)}
+  .note{font-size:13px;color:var(--muted);margin:6px 0 0}
+  .demo{background:var(--dark);color:#e8e4da;border-radius:16px;padding:24px;margin:24px 0}
+  .demo h3{margin:0 0 4px;font-size:19px;color:#fff}
+  .demo .dsub{color:#a39a8a;font-size:14px;margin:0 0 18px}
+  .presets{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
+  .presets button,.demo .runbtn,.demo .resetbtn{
+    font:inherit;font-size:14px;cursor:pointer;border-radius:999px;
+    border:1px solid #4a4438;background:transparent;color:#e8e4da;padding:8px 14px}
+  .presets button:hover{border-color:#e8e4da}
+  .presets button.active{background:#e8e4da;color:var(--dark);border-color:#e8e4da}
+  .demo .runbtn{background:var(--blue);border-color:var(--blue);color:#fff;font-weight:700}
+  .demo .runbtn:disabled{opacity:.45;cursor:default}
+  .demo .resetbtn{margin-left:8px}
+  .log{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;
+    line-height:1.75;background:#0b0a08;border:1px solid #2c2822;border-radius:10px;
+    padding:16px 18px;min-height:180px;white-space:pre-wrap;word-break:break-word}
+  .log .q{color:#8ab4ff}
+  .log .s{color:#c9b8ff}
+  .log .f{color:#7ee2a8}
+  .log .d{color:#f0a3a3}
+  .log .a{color:#ffd479}
+  .log .m{color:#8a8172}
+  .log .ok{color:#7ee2a8;font-weight:700}
+  .log a{color:#8ab4ff}
+  .answer{background:#1d1a15;border:1px solid #3a332a;border-radius:10px;padding:14px 16px;
+    margin-top:12px;font-size:14px;line-height:1.6;display:none}
+  .answer.show{display:block}
+  .answer b{color:#ffd479}
+  .namecard{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:24px 0}
+  @media(max-width:640px){.namecard{grid-template-columns:1fr}}
+  .namecard .card{text-align:left}
+  .namecard .big{font-family:Georgia,serif;font-size:34px;line-height:1;color:var(--blue)}
+  .offer{background:var(--ink);color:#f3efe6;border-radius:18px;padding:36px 32px;
+    margin:48px 0 8px;text-align:center}
+  .offer h2{color:#fff;font-size:34px}
+  .offer p{color:#c9c2b2;margin:0 auto 22px;max-width:520px}
+  .offer a.btn{display:inline-block;background:#fff;color:var(--ink);font-weight:700;
+    font-size:17px;text-decoration:none;border-radius:999px;padding:14px 30px}
+  .offer a.btn:hover{background:var(--blue);color:#fff}
+  .offer .fine{font-size:13px;color:#8a8172;margin:18px 0 0}
+  .sources{font-size:14px;color:var(--muted)}
+  .sources a{color:var(--blue)}
+  .sources li{margin-bottom:8px}
+  footer{padding:28px 0 48px;border-top:1px solid var(--line);margin-top:48px;
+    font-size:14px;color:var(--muted)}
+  footer a{color:var(--blue)}
+  .disc{font-size:13px;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <p class="eyebrow"><b>WebNative.ai</b> &nbsp;·&nbsp; Premium domain for sale</p>
+    <h1>Born in <em>the web.</em></h1>
+    <p class="lede">The next AI infrastructure battle is not about GPUs. It is about the interface
+    between agents and the web — who gets to search it, extract from it, charge for it,
+    and learn from it. <strong>WebNative.ai is the name for the side that belongs there.</strong></p>
+  </header>
+
+  <hr class="rule">
+
+  <!-- 1. THE SHIFT -->
+  <section>
+    <p class="kicker">The shift</p>
+    <h2>Search stopped being a destination.</h2>
+    <p class="sub">It became part of the task.</p>
+    <p>Instead of handing a person links, an agent now searches repeatedly — reads, compares
+    sources, fills gaps — until it can complete the assignment. Google calls the mechanism
+    <strong>query fan-out</strong>: one question decomposed into sub-questions, run in parallel,
+    synthesized into one answer.</p>
+    <div class="fact">
+      <div class="n">8–12</div>
+      <p>Sub-queries per standard question in Google AI Mode, per Google's own description.
+      <span class="src">Google AI Mode launch, March 2025.</span></p>
+    </div>
+    <div class="fact">
+      <div class="n">100s</div>
+      <p>Searches a single Deep Search run can issue for a complex question.
+      <span class="src">Google I/O, May 2025. Gemini 3 upgraded the fan-out further in November 2025.</span></p>
+    </div>
+    <div class="fact">
+      <div class="n">1st</div>
+      <p>Search is now the agent's first move, not the human's last resort. The retrieval layer
+      decides what the agent can know — and therefore what it can do.</p>
+    </div>
+  </section>
+
+  <hr class="rule">
+
+  <!-- 2. THE LAYER -->
+  <section>
+    <p class="kicker">The layer</p>
+    <h2>Three positions are forming.</h2>
+    <p class="sub">Integrated platforms, specialized providers, and the people who charge for the door.</p>
+    <table>
+      <tr><th>Position</th><th>Who</th><th>Role</th></tr>
+      <tr>
+        <td>Integrated</td>
+        <td>Google / Gemini</td>
+        <td>Bundle models, indexing, retrieval, and agent capabilities in one stack.</td>
+      </tr>
+      <tr>
+        <td>Specialized</td>
+        <td>Tavily, Firecrawl, Exa</td>
+        <td>Supply search and extraction across model platforms — infrastructure you can swap the model underneath.</td>
+      </tr>
+      <tr>
+        <td>Access &amp; monetization</td>
+        <td>Cloudflare</td>
+        <td>Help content owners control and price automated access: allow, charge, or block — per crawler.</td>
+      </tr>
+    </table>
+    <p>The specialist layer is already consolidating. In February 2026, Nebius — the AI cloud
+    company — announced its acquisition of Tavily, the search API most agent builders reach for
+    first. The agreement was announced February 10 and closed February 19, at a reported
+    $275 million. Tavily keeps its brand and its founder; it now sits inside Nebius's cloud
+    platform. Tavily reports 3 million-plus developers building with it and 100 million-plus
+    requests a month.</p>
+    <p>On the other side of the door, Cloudflare launched <strong>Pay Per Crawl</strong> in private
+    beta on July 1, 2025, built on the web's long-dormant HTTP 402 Payment Required response:
+    a publisher sets a price, and each crawler is allowed, charged, or blocked. In July 2026
+    Cloudflare began evolving it into <strong>Pay Per Use</strong> — publishers paid when their
+    content actually creates value, not just when it is fetched — and from September 15, 2026,
+    new domains block AI training and agent bots on ad-supported pages by default.</p>
+    <p class="note">Being online no longer means being freely retrievable. Access is now a permission
+    and a price — which is exactly why the agent that is native to the web, rather than a
+    visitor to it, is the valuable side of the argument.</p>
+  </section>
+
+  <hr class="rule">
+
+  <!-- 3. THE TRAJECTORY TURN -->
+  <section>
+    <p class="kicker">The trajectory turn</p>
+    <h2>The web became a classroom, not just a library.</h2>
+    <p class="sub">The most consequential distinction in the whole argument: an agent's research
+    run — its searches, tool calls, source selections, and results — is a <em>trajectory</em>.
+    Trajectories can be evaluated. The good ones become training data. The web stops being
+    merely text to ingest and becomes an environment for learning how to work.</p>
+    <p>NVIDIA's account, as reported by Tavily and NVIDIA:</p>
+    <div class="funnel">
+      <div class="bar"><div class="lbl">Research runs generated</div><div class="fill" style="width:100%">~80,000</div></div>
+      <div class="bar"><div class="lbl">Kept after quality filtering</div><div class="fill dim" style="width:84%">~67,000</div></div>
+      <div class="bar"><div class="lbl">Fine-tuned model</div><div class="fill amber" style="width:64%">Nemotron 3 Super</div></div>
+    </div>
+    <p>Those ~67,000 retained trajectories fine-tuned Nemotron 3 Super in roughly 25 hours on
+    128 H100 GPUs, and the resulting researcher — NVIDIA AI-Q — reached #1 on DeepResearch
+    Bench I and II. Poor retrieval wastes more than an agent's time and inference budget: it
+    wastes the compute spent generating training examples that get rejected. Better information
+    access improves both application quality and training efficiency.</p>
+    <p class="note">Figures as reported by Tavily (October 2026) and NVIDIA (Hugging Face). The economics
+    of this layer — market size, margins, durable advantage — are still unproven, and no AI
+    lab has publicly said it pays for crawled access. Read this as a map of an emerging
+    infrastructure layer, not a demonstrated investment case.</p>
+  </section>
+
+  <hr class="rule">
+
+  <!-- 4. DEMO -->
+  <section>
+    <p class="kicker">See it work</p>
+    <h2>Run a research run.</h2>
+    <p class="sub">A labelled simulation of the loop this page describes: one question fans out,
+    sources are retrieved and compared, weak trajectories are filtered out, and what survives
+    becomes the answer — and the training data. The sources below are the real pages this
+    page verified; the run itself is illustrative, not a live search.</p>
+
+    <div class="demo">
+      <h3>Research run — simulation</h3>
+      <p class="dsub">Pick a question. Watch the agent fan out, retrieve, compare, and filter.</p>
+      <div class="presets">
+        <button data-run="a" class="active">Which agent-search APIs offer a free tier?</button>
+        <button data-run="b">How do publishers charge AI crawlers?</button>
+        <button data-run="c">What made NVIDIA's research agent top the benchmark?</button>
+      </div>
+      <button class="runbtn" id="runBtn">▶&nbsp; Run it</button>
+      <button class="resetbtn" id="resetBtn">Reset</button>
+      <div class="log" id="log"><span class="m">Ready. Pick a question and press Run — the agent plans, fans out,
+retrieves, compares, filters, and synthesizes. Every source named
+below is a page this site verified; the run itself is a simulation.</span></div>
+      <div class="answer" id="answer"></div>
+    </div>
+  </section>
+
+  <hr class="rule">
+
+  <!-- 5. THE NAME -->
+  <section>
+    <p class="kicker">The name</p>
+    <h2>Web-native, not web-visiting.</h2>
+    <p class="sub">A visitor asks permission at the door. A native belongs in the room.</p>
+    <div class="namecard">
+      <div class="card"><div class="big">9</div><h3>Letters</h3><p>Short, pronounceable, two plain English words. It says what it is the first time you hear it.</p></div>
+      <div class="card"><div class="big">.ai</div><h3>The extension of the field</h3><p>The TLD the agent-infrastructure layer actually trades in — Tavily, Firecrawl, and Exa all sell to builders who live in .ai.</p></div>
+      <div class="card"><div class="big">1</div><h3>Idea</h3><p>Not a feature, a stance: the agent that is of the web, not merely on it. Search, extraction, permission, and learning — native.</p></div>
+    </div>
+    <p>Browser-Agent describes what the thing does. Deep-Fetch describes how it moves.
+    <strong>WebNative describes what it is.</strong> For the company building the retrieval layer —
+    or the one selling the door to it — that is the name that frames the category instead of
+    chasing it.</p>
+  </section>
+
+  <!-- 6. OFFER -->
+  <div class="offer">
+    <p class="kicker" style="color:#ffd479">Own the name</p>
+    <h2>WebNative.ai is for sale.</h2>
+    <p>The interface between agents and the web is being built now — the search layer, the
+    extraction layer, the permission layer, and the training data they generate. This is the
+    name for the side that belongs there.</p>
+    <a class="btn" href="https://www.atom.com/name/WebNative.ai">Make an offer on Atom →</a>
+    <p class="fine">Listed on Atom as a premium domain. Transfer handled by Atom after purchase.</p>
+  </div>
+
+  <hr class="rule">
+
+  <!-- SOURCES -->
+  <section>
+    <p class="kicker">Sources &amp; attribution</p>
+    <h2>What this page stands on.</h2>
+    <p>Every factual claim above traces to one of these. Figures are the reporting company's
+    own, unless stated otherwise.</p>
+    <ul class="sources">
+      <li>Kevin Hein, "The Next AI Infrastructure Battle Is Over the Interface Between Agents and the Web" — Forbes, republished by Yahoo, November 5, 2026. <a href="https://tech.yahoo.com/ai/gemini/articles/next-ai-infrastructure-battle-over-195515005.html">tech.yahoo.com</a></li>
+      <li>Nebius Group, Q4 2025 shareholder letter — Tavily acquisition announced February 10, 2026; closed February 19, 2026. <a href="https://assets.nebius.com/assets/85571bd2-050b-468c-954c-42e9d24e4cd2/Letter%20to%20Shareholders%20Q4%202025.pdf">assets.nebius.com</a></li>
+      <li>Tavily, "World of Tavily: Where We Started, Where We're Going" (October 2026) and Post-Training — ~80,000 runs, ~67,000 trajectories retained; 3M+ developers, 100M+ requests a month. <a href="https://www.tavily.com/blog/world-of-tavily-where-we-started-where-we-are-going">tavily.com</a></li>
+      <li>NVIDIA / Hugging Face, "How NVIDIA AI-Q Reached #1 on DeepResearch Bench I and II" — trajectory counts, judge filtering, ~25 hours on 16×8 H100 GPUs, benchmark scores. <a href="https://huggingface.co/blog/nvidia/how-nvidia-won-deepresearch-bench">huggingface.co</a></li>
+      <li>Cloudflare, "Your Content, Your Rules" (July 1, 2026) — Pay Per Crawl to Pay Per Use; September 15, 2026 defaults. <a href="https://www.cloudflare.com/press/press-releases/2026/cloudflare-allows-the-agentic-internet-to-flourish-with-a-simple-philosophy-your-content-your-rules/">cloudflare.com</a></li>
+      <li>Google, "Gemini 3 in Search and AI Mode" (November 2025) — query fan-out upgrade; Deep Search. <a href="https://blog.google/products-and-platforms/products/search/gemini-3-search-ai-mode/">blog.google</a></li>
+      <li>Exa, "Exa vs Tavily" — specialist-provider framing; Exa's index claims. <a href="https://exa.ai/versus/tavily">exa.ai</a></li>
+    </ul>
+    <p class="disc">This is a concept page for the domain name, not a product, company, or offer of
+    services. No price is stated; offers are made through the Atom listing.</p>
+  </section>
+
+  <footer>
+    <p>This domain is for sale — <a href="https://www.atom.com/name/WebNative.ai">Make an offer on Atom</a></p>
+    <p class="disc">WebNative.ai — registered April 2025. Concept page built November 2026.</p>
+  </footer>
+
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var SOURCES = {
+    tavilyBlog: {label:"Tavily blog — World of Tavily (Oct 2026)", url:"https://www.tavily.com/blog/world-of-tavily-where-we-started-where-we-are-going"},
+    tavilyPost: {label:"Tavily — Post-Training", url:"https://www.tavily.com/solutions/post-training"},
+    hf: {label:"Hugging Face — How NVIDIA AI-Q won DeepResearch Bench", url:"https://huggingface.co/blog/nvidia/how-nvidia-won-deepresearch-bench"},
+    cf: {label:"Cloudflare — Your Content, Your Rules (Jul 1, 2026)", url:"https://www.cloudflare.com/press/press-releases/2026/cloudflare-allows-the-agentic-internet-to-flourish-with-a-simple-philosophy-your-content-your-rules/"},
+    google: {label:"Google — Gemini 3 in Search and AI Mode", url:"https://blog.google/products-and-platforms/products/search/gemini-3-search-ai-mode/"},
+    nebius: {label:"Nebius — Q4 2025 shareholder letter", url:"https://assets.nebius.com/assets/85571bd2-050b-468c-954c-42e9d24e4cd2/Letter%20to%20Shareholders%20Q4%202025.pdf"},
+    exa: {label:"Exa — Exa vs Tavily", url:"https://exa.ai/versus/tavily"},
+    yahoo: {label:"Forbes via Yahoo — The Next AI Infrastructure Battle (Nov 5, 2026)", url:"https://tech.yahoo.com/ai/gemini/articles/next-ai-infrastructure-battle-over-195515005.html"}
+  };
+
+  var RUNS = {
+    a: {
+      question: "Which agent-search APIs offer a free tier?",
+      subs: [
+        "agent search API free tier 2026",
+        "Tavily pricing free credits",
+        "Exa API free tier",
+        "Nebius Tavily acquisition"
+      ],
+      retrieves: [
+        {sub:0, src:"tavilyPost"}, {sub:0, src:"exa"},
+        {sub:1, src:"tavilyBlog"}, {sub:1, src:"nebius"},
+        {sub:2, src:"exa"}, {sub:2, src:"tavilyPost"},
+        {sub:3, src:"nebius"}, {sub:3, src:"tavilyBlog"}
+      ],
+      extracts: [
+        {text:"Tavily lists a free tier of 1,000 credits a month, pay-as-you-go after that.", src:"tavilyPost"},
+        {text:"Tavily was acquired by Nebius in February 2026 and keeps its own brand.", src:"nebius"},
+        {text:"Exa positions itself as the independent specialist — search for AI, no parent company.", src:"exa"},
+        {text:"Tavily reports 3M+ developers and 100M+ requests a month.", src:"tavilyBlog"}
+      ],
+      filter: {generated: 6, kept: 5, dropped: 1, reason: "1 trajectory dropped — duplicate of an earlier retrieval (same Exa comparison page)."},
+      answer: "Tavily is the default free starting point: 1,000 credits a month, no card, inside Nebius since February 2026. Exa is the independent alternative, competing on index depth. The free tier is the on-ramp — the moat, if any, is retrieval quality, not price."
+    },
+    b: {
+      question: "How do publishers charge AI crawlers?",
+      subs: [
+        "Cloudflare Pay Per Crawl launch",
+        "HTTP 402 Payment Required crawlers",
+        "Cloudflare Pay Per Use July 2026",
+        "AI crawler default block September 2026"
+      ],
+      retrieves: [
+        {sub:0, src:"cf"}, {sub:0, src:"yahoo"},
+        {sub:1, src:"cf"}, {sub:1, src:"yahoo"},
+        {sub:2, src:"cf"}, {sub:2, src:"tavilyBlog"},
+        {sub:3, src:"cf"}, {sub:3, src:"yahoo"}
+      ],
+      extracts: [
+        {text:"Pay Per Crawl launched in private beta July 1, 2025, on HTTP 402 Payment Required.", src:"cf"},
+        {text:"Publishers choose Allow, Charge, or Block — per crawler, not per site.", src:"cf"},
+        {text:"July 1, 2026: Cloudflare evolves Pay Per Crawl into Pay Per Use — paid when content creates value.", src:"cf"},
+        {text:"From Sept 15, 2026, new domains block AI training and agent bots on ad pages by default.", src:"cf"}
+      ],
+      filter: {generated: 6, kept: 4, dropped: 2, reason: "2 trajectories dropped — both cited the same announcement twice; no new evidence."},
+      answer: "Through a toll booth, not a wall: Cloudflare's Pay Per Crawl (July 2025, still in closed beta) prices access per request via HTTP 402, and its successor Pay Per Use (July 2026) pays when content shows up in an answer. The default has already flipped — new domains block training and agent bots unless the publisher opts in."
+    },
+    c: {
+      question: "What made NVIDIA's research agent top the benchmark?",
+      subs: [
+        "NVIDIA AI-Q DeepResearch Bench",
+        "Nemotron 3 Super fine-tune trajectories",
+        "Tavily 80,000 research trajectories",
+        "DeepResearch Bench scores"
+      ],
+      retrieves: [
+        {sub:0, src:"hf"}, {sub:0, src:"tavilyPost"},
+        {sub:1, src:"hf"}, {sub:1, src:"tavilyBlog"},
+        {sub:2, src:"tavilyBlog"}, {sub:2, src:"tavilyPost"},
+        {sub:3, src:"hf"}, {sub:3, src:"yahoo"}
+      ],
+      extracts: [
+        {text:"~80,000 research trajectories generated via Tavily, on real live-web results.", src:"tavilyBlog"},
+        {text:"~67,000 retained after filtering with a principle-based judge model.", src:"hf"},
+        {text:"Fine-tuned in ~25 hours on 128 H100 GPUs (16×8).", src:"hf"},
+        {text:"AI-Q reached #1 on DeepResearch Bench I (55.95) and II (54.50).", src:"hf"}
+      ],
+      filter: {generated: 6, kept: 5, dropped: 1, reason: "1 trajectory dropped — a run whose sources were all near-duplicates of one seed question."},
+      answer: "Not a bigger model — a better loop. NVIDIA generated ~80,000 live-web research runs through Tavily, kept the ~67,000 that passed a quality judge, and fine-tuned Nemotron 3 Super on them in about a day. The web wasn't the training data. The work of searching the web was."
+    }
+  };
+
+  var log = document.getElementById("log");
+  var answerBox = document.getElementById("answer");
+  var runBtn = document.getElementById("runBtn");
+  var resetBtn = document.getElementById("resetBtn");
+  var presetBtns = Array.prototype.slice.call(document.querySelectorAll(".presets button"));
+  var selected = "a";
+  var running = false;
+
+  function sleep(ms){ return new Promise(function(r){ setTimeout(r, ms); }); }
+  function esc(s){ return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+  function line(html){ log.innerHTML += html + "\n"; log.scrollTop = log.scrollHeight; }
+  function srcLink(key){
+    var s = SOURCES[key];
+    return '<a href="' + s.url + '" target="_blank" rel="noopener">' + esc(s.label) + "</a>";
+  }
+
+  presetBtns.forEach(function(b){
+    b.addEventListener("click", function(){
+      if (running) return;
+      presetBtns.forEach(function(x){ x.classList.remove("active"); });
+      b.classList.add("active");
+      selected = b.getAttribute("data-run");
+      resetLog();
+    });
+  });
+
+  function resetLog(){
+    log.innerHTML = '<span class="m">Ready. Press Run — the agent plans, fans out,\nretrieves, compares, filters, and synthesizes. Every source named\nbelow is a page this site verified; the run itself is a simulation.</span>';
+    answerBox.classList.remove("show");
+    answerBox.innerHTML = "";
+  }
+  resetBtn.addEventListener("click", function(){ if (!running) resetLog(); });
+
+  runBtn.addEventListener("click", async function(){
+    if (running) return;
+    running = true;
+    runBtn.disabled = true;
+    var run = RUNS[selected];
+    log.innerHTML = "";
+    answerBox.classList.remove("show");
+    answerBox.innerHTML = "";
+
+    line('<span class="m">── plan ──────────────────────────────────────</span>');
+    line('<span class="q">Q: ' + esc(run.question) + '</span>');
+    await sleep(500);
+    line('<span class="m">Decomposing into sub-queries…</span>');
+    await sleep(600);
+
+    line('<span class="m">── fan-out ───────────────────────────────────</span>');
+    for (var i = 0; i < run.subs.length; i++){
+      line('<span class="q">  ↳ ' + esc(run.subs[i]) + '</span>');
+      await sleep(420);
+    }
+
+    line('<span class="m">── retrieve ──────────────────────────────────</span>');
+    for (var j = 0; j < run.retrieves.length; j++){
+      var r = run.retrieves[j];
+      line('<span class="s">  ✓ retrieved → ' + srcLink(r.src) + '</span>');
+      await sleep(380);
+    }
+
+    line('<span class="m">── extract &amp; compare ─────────────────────────</span>');
+    for (var k = 0; k < run.extracts.length; k++){
+      var e = run.extracts[k];
+      line('<span class="f">  • ' + esc(e.text) + '</span>');
+      line('<span class="m">    — ' + srcLink(e.src) + '</span>');
+      await sleep(520);
+    }
+
+    line('<span class="m">── filter trajectories ───────────────────────</span>');
+    await sleep(500);
+    line('<span class="m">  ' + run.filter.generated + ' trajectories generated → ' +
+      '<span class="ok">' + run.filter.kept + ' kept</span> · ' +
+      '<span class="d">' + run.filter.dropped + ' dropped</span></span>');
+    line('<span class="m">  ' + esc(run.filter.reason) + '</span>');
+    await sleep(600);
+
+    line('<span class="m">── synthesize ────────────────────────────────</span>');
+    await sleep(500);
+    answerBox.innerHTML = '<b>Answer.</b> ' + esc(run.answer) +
+      '<br><br><span style="color:#8a8172">Trajectory saved — this run is now training data for the next one. ' +
+      'That is the turn: the web is not just what the agent reads. It is how the agent learns.</span>';
+    answerBox.classList.add("show");
+    line('<span class="a">  ✓ answer synthesized · trajectory saved</span>');
+
+    running = false;
+    runBtn.disabled = false;
+  });
+})();
+</script>
+</body>
+</html>
